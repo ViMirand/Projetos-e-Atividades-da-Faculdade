@@ -11,7 +11,7 @@ int ocupados=0, livres=10*10, Ingressos[2];
 void coloracaoTexto(int X, int Z){
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 	SetConsoleTextAttribute(hConsole, X * 16 + Z); 
-// Z e X definem a cor da letra, mas quando X Ã© multiplicado por 16, expande o fundo para preencher todo o byte, ou seja, coloca o X nos bits mais altos.
+// Z e X definem a cor da letra, mas quando X é multiplicado por 16, expande o fundo para preencher todo o byte, ou seja, coloca o X nos bits mais altos.
 // Sendo assim: X para a Cor do fundo e Z para a Cor da Letra.
 }
 int Comp(char op){
@@ -19,6 +19,8 @@ int Comp(char op){
 	for(a=0;a<COL-1;a++){
 		if((op=='A'+ a)||(op=='1'+ a)){
 			comp = 1;
+		}else if(op=='#'){
+			comp = 2;
 		}
 	}
 	return (comp);
@@ -29,6 +31,8 @@ void Cor(int op, char poltrona){
 	comp = Comp(poltrona);
 	if (comp == 1){
 		op = 2;
+	}else if( comp == 2){
+		op = 3;
 	}
 	switch (op){
 		case 0:
@@ -36,7 +40,9 @@ void Cor(int op, char poltrona){
 		case 1:
 			coloracaoTexto(2,15);break;
 		case 2:
-			coloracaoTexto(0,11);break;
+			coloracaoTexto(0,15);break;
+		case 3:
+			coloracaoTexto(6,15);break;
 	}
 }
 
@@ -46,8 +52,11 @@ void Start(){
 		for(b=0;b<LIN-1;b++){
 			Poltronas[a][b] = '_';
 			Poltronas[0][a] = '0' + a;
-			Poltronas[a][0] = 64 + a;
-			Poltronas[a][11] = 64 + a;
+			Poltronas[a][0] = 75 - a;
+			Poltronas[a][11] = 75 - a;
+			if(a==10 && b<11){
+				Poltronas[a][b] = '#';
+			}
 		}
 	}
 	for(a=0;a<2;a++){
@@ -82,7 +91,7 @@ void OcupacaoAssento(char letra, char numero){
 	int a, b;
 	for(a=1;a<COL-1;a++){
 		for(b=1;b<LIN-1;b++){
-			if(letra== 64+ a && numero == '0'+ b){
+			if(letra== 75 - a && numero == '0' + b){
 				Poltronas[a][b] = 'O';
 				livres-=1;
 				ocupados+=1;
@@ -108,7 +117,7 @@ void Tabela(){
 			printf(" %c ", Poltronas[a][b]);
 		}
 	}
-	printf("\n\n\n");
+	printf("\n\t*********** TELA *************\n");
 }
 void Entrada(int ingresso){
 	if(ingresso == '1'){
@@ -118,6 +127,31 @@ void Entrada(int ingresso){
 	}
 }
 
+void Legenda(){
+	int A = 15;
+	Gotoxy(50, A-1);
+	printf("    LEGENDA DE ASENTOS");
+	Gotoxy(50, A);
+	printf("_______________________");
+	Gotoxy(50,A +1);
+	printf("NORMAL: ");
+	coloracaoTexto(2, 15);
+	printf(" _ ");
+	Gotoxy(50, A + 2);
+	coloracaoTexto(0, 15);
+	printf("PRIORIDADE: ");
+	coloracaoTexto(6, 15);
+	printf(" # ");
+	Gotoxy(50, A + 3);
+	coloracaoTexto(0, 15);
+	printf("OCUPADO: ");
+	coloracaoTexto(2, 15);
+	printf(" O ");
+	Gotoxy(50, A + 4);
+	coloracaoTexto(0, 15);
+	printf("________________________");
+}
+
 void Venda(){
 	char assento[3];
 	int a, b=1;
@@ -125,10 +159,11 @@ void Venda(){
 		coloracaoTexto(12,0);
 		printf("*PARA FECHAR O PROGRAMA, DIGITE 0! PARA EXCLUIR UMA ENTRADA DIGITE 1*\n");
 		coloracaoTexto(0, 15);
-		Tabela(); // Mostra a Tabela de PreÃ§os + matriz das poltronas.
+		Tabela(); // Mostra a Tabela de Preços + matriz das poltronas.
 		coloracaoTexto(0, 15);
 		printf("continuar?");
-		Gotoxy(10,25);
+		Legenda();
+		Gotoxy(10,24);
 		scanf("%d", &b);
 		if(b!=0){
 			Gotoxy(0, 27);
@@ -178,7 +213,7 @@ void Fechamento(){
 
 int main(){
 	Start(); // Inicia as poltronas zeradas.
-	Msg(1); // DÃ¡ as boas vindas ao sistema.
+	Msg(1);  // Dá as boas vindas ao sistema.
 	coloracaoTexto(0,15);
 	system("pause");
 	system("cls");
@@ -193,7 +228,7 @@ int main(){
 	return 10;
 }
 /*
-| CÃ³digo | Cor do texto         |
+| Código | Cor do texto         |
 | :----: | :------------------- |
 |    0   | Preto                |
 |    1   | Azul escuro          |
@@ -202,7 +237,7 @@ int main(){
 |    4   | Vermelho escuro      |
 |    5   | Roxo escuro          |
 |    6   | Amarelo escuro       |
-|    7   | Cinza claro (padrÃ£o) |
+|    7   | Cinza claro (padrão) |
 |    8   | Cinza escuro         |
 |    9   | Azul claro           |
 |   10   | Verde claro          |

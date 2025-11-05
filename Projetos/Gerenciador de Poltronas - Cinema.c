@@ -11,7 +11,7 @@ int ocupados=0, livres=10*10, Ingressos[2];
 void coloracaoTexto(int X, int Z){
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 	SetConsoleTextAttribute(hConsole, X * 16 + Z); 
-// Z e X definem a cor da letra, mas quando X é multiplicado por 16, expande o fundo para preencher todo o byte, ou seja, coloca o X nos bits mais altos.
+// Z e X definem a cor da letra, mas quando X Ã© multiplicado por 16, expande o fundo para preencher todo o byte, ou seja, coloca o X nos bits mais altos.
 // Sendo assim: X para a Cor do fundo e Z para a Cor da Letra.
 }
 int Comp(char op){
@@ -159,7 +159,7 @@ void Venda(){
 		coloracaoTexto(12,0);
 		printf("*PARA FECHAR O PROGRAMA, DIGITE 0! PARA EXCLUIR UMA ENTRADA DIGITE 1*\n");
 		coloracaoTexto(0, 15);
-		Tabela(); // Mostra a Tabela de Preços + matriz das poltronas.
+		Tabela(); // Mostra a Tabela de PreÃ§os + matriz das poltronas.
 		coloracaoTexto(0, 15);
 		printf("continuar?");
 		Legenda();
@@ -176,8 +176,18 @@ void Venda(){
 				}else if(a==1){
 					Gotoxy(73, 27);
 				}
-				/*if(a==2){
-					while(assento[a] !='1' || assento[a] !='2'){
+				if(a==0){
+					for(a=1;a<COL-1;a++){
+						for(b=1;b<LIN-1;b++){
+							if(letra== 75 - a && numero == '0' + b){
+								Poltronas[a][b] = 'O';
+								livres-=1;
+								ocupados+=1;
+							}
+						}
+					}
+					soma=0;
+					if(soma!=0){
 						Gotoxy(75, 27);
 						coloracaoTexto(12,15);
 						printf("OPCAO INVALIDA! DIGITE NOVAMENTE!");
@@ -185,8 +195,17 @@ void Venda(){
 						Gotoxy(73, 27);
 						scanf(" %c", &assento[a]);
 					}
-				}*/
-				
+				}
+				if(a==2){
+					while(assento[a] !='1' && assento[a] !='2'){
+						Gotoxy(75, 27);
+						coloracaoTexto(12,15);
+						printf("OPCAO INVALIDA! DIGITE NOVAMENTE!");
+						coloracaoTexto(0,15);
+						Gotoxy(73, 27);
+						scanf(" %c", &assento[a]);
+					}
+				}
 			}
 			Entrada(assento[2]);
 			OcupacaoAssento(assento[0], assento[1]);
@@ -213,7 +232,7 @@ void Fechamento(){
 
 int main(){
 	Start(); // Inicia as poltronas zeradas.
-	Msg(1);  // Dá as boas vindas ao sistema.
+	Msg(1);  // DÃ¡ as boas vindas ao sistema.
 	coloracaoTexto(0,15);
 	system("pause");
 	system("cls");
@@ -228,7 +247,7 @@ int main(){
 	return 10;
 }
 /*
-| Código | Cor do texto         |
+| CÃ³digo | Cor do texto         |
 | :----: | :------------------- |
 |    0   | Preto                |
 |    1   | Azul escuro          |
@@ -237,7 +256,7 @@ int main(){
 |    4   | Vermelho escuro      |
 |    5   | Roxo escuro          |
 |    6   | Amarelo escuro       |
-|    7   | Cinza claro (padrão) |
+|    7   | Cinza claro (padrÃ£o) |
 |    8   | Cinza escuro         |
 |    9   | Azul claro           |
 |   10   | Verde claro          |

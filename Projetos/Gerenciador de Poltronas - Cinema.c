@@ -6,7 +6,7 @@
 #define LIN 13
 float Valores[2];
 char Poltronas[COL][LIN];
-int ocupados=0, livres=10*10, Ingressos[2];
+int ocupados=0, livres=10*10, Ingressos[2], opcao;
 
 void coloracaoTexto(int X, int Z){
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -69,21 +69,42 @@ void Gotoxy(int x, int y) {
     SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
 }
 
-float Msg(int op){
+void Editar(){
+	
+}
+
+void Verificacao(){
+	switch (opcao){
+		case 1:
+			system("cls");
+			Msg(2); // Pede os valores dos ingressos.
+			coloracaoTexto(0,15);
+			system("pause");
+			system("cls");
+			Venda();break;
+		case 2:
+			Editar();
+	}
+}
+
+void Msg(int op){
 	int a;
 	switch (op){
 		case 1:
 			printf("\n\n\n\n\n\n\n\n\n\n\t\t\tSistema de Gerenciamento de Poltronas"); 
-			coloracaoTexto(0, 12); 
+			coloracaoTexto(0, 14); 
 			printf(" ARCA DA ALIANCA.\n\n\n\n\n\n\n\n\n\n\n"); break;
 		case 2:
-			printf("Preencha a tabela com os valores de Entrada.\nInteira:\nMeia:");
+			printf("Preencha a tabela com o valor do Ingresso.\nInteiro:\nMeia:");
 			Gotoxy(9, 1);
-			for(a=0; a<2;a++){
-				scanf("%f", &Valores[a]);
-				Gotoxy(6, 2);
-			}
-			printf("\n"); break;
+			scanf("%f", &Valores[0]);
+			Valores[1] = Valores[0]/2;
+			Gotoxy(6, 2);
+			printf("%.2f\n"); 
+			system("pause"); break;
+		case 3:
+			printf("\t\tMENU DE OPCOES\n\n1 - Visualizar sala\n2 - Editar Assentos\n\n\n");
+			scanf("%d", &opcao);
 	}
 }
 
@@ -145,7 +166,7 @@ void Legenda(){
 	Gotoxy(50, A + 3);
 	coloracaoTexto(0, 15);
 	printf("OCUPADO: ");
-	coloracaoTexto(2, 15);
+	coloracaoTexto(4, 15);
 	printf(" O ");
 	Gotoxy(50, A + 4);
 	coloracaoTexto(0, 15);
@@ -154,8 +175,9 @@ void Legenda(){
 
 void Venda(){
 	char assento[3];
-	int a, b=1;
+	int a, b=1, soma;
 	do{
+		soma=0;
 		coloracaoTexto(12,0);
 		printf("*PARA FECHAR O PROGRAMA, DIGITE 0! PARA EXCLUIR UMA ENTRADA DIGITE 1*\n");
 		coloracaoTexto(0, 15);
@@ -175,26 +197,6 @@ void Venda(){
 					Gotoxy(50, 27);
 				}else if(a==1){
 					Gotoxy(73, 27);
-				}
-				if(a==0){
-					for(a=1;a<COL-1;a++){
-						for(b=1;b<LIN-1;b++){
-							if(letra== 75 - a && numero == '0' + b){
-								Poltronas[a][b] = 'O';
-								livres-=1;
-								ocupados+=1;
-							}
-						}
-					}
-					soma=0;
-					if(soma!=0){
-						Gotoxy(75, 27);
-						coloracaoTexto(12,15);
-						printf("OPCAO INVALIDA! DIGITE NOVAMENTE!");
-						coloracaoTexto(0,15);
-						Gotoxy(73, 27);
-						scanf(" %c", &assento[a]);
-					}
 				}
 				if(a==2){
 					while(assento[a] !='1' && assento[a] !='2'){
@@ -232,15 +234,14 @@ void Fechamento(){
 
 int main(){
 	Start(); // Inicia as poltronas zeradas.
-	Msg(1);  // DÃ¡ as boas vindas ao sistema.
+	Msg(1);  // Dá as boas vindas ao sistema.
 	coloracaoTexto(0,15);
 	system("pause");
 	system("cls");
-	Msg(2); // Pede os valores dos ingressos.
-	coloracaoTexto(0,15);
+	Msg(3);
+	Verificacao();
 	system("pause");
 	system("cls");
-	Venda();
 	coloracaoTexto(0,15);
 	Fechamento();
 	system("pause");

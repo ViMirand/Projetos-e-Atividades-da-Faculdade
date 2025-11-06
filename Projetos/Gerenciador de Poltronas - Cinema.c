@@ -98,7 +98,11 @@ void Msg(int op){
 			printf("Preencha a tabela com o valor do Ingresso.\nInteiro:\nMeia:");
 			Gotoxy(9, 1);
 			scanf("%f", &Valores[0]);
+<<<<<<< HEAD
 			Valores[1] = (int)Valores[0] / 2;
+=======
+			Valores[1] = Valores[0]/2;
+>>>>>>> fc0ce6b5d11c88a713f70601635b275375657091
 			Gotoxy(6, 2);
 			printf("%.2f\n"); 
 			system("pause"); break;
@@ -173,10 +177,28 @@ void Legenda(){
 	printf("________________________");
 }
 
+<<<<<<< HEAD
 void Opcao(){
 	int a;
 	switch (opcao){
 		case 0:
+=======
+void Venda(){
+	char assento[3];
+	int a, b=1, soma;
+	do{
+		soma=0;
+		coloracaoTexto(12,0);
+		printf("*PARA FECHAR O PROGRAMA, DIGITE 0! PARA EXCLUIR UMA ENTRADA DIGITE 1*\n");
+		coloracaoTexto(0, 15);
+		Tabela(); // Mostra a Tabela de Preços + matriz das poltronas.
+		coloracaoTexto(0, 15);
+		printf("continuar?");
+		Legenda();
+		Gotoxy(10,24);
+		scanf("%d", &b);
+		if(b!=0){
+>>>>>>> fc0ce6b5d11c88a713f70601635b275375657091
 			Gotoxy(0, 27);
 			printf("Letra da fileira: \t\tNumero do assento: \t\tEntrada: \n\t\t\t\t\t\t\t\t\t1-Meia\t2-Inteira");
 			Gotoxy(17, 27);

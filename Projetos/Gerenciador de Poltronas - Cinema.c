@@ -8,6 +8,8 @@
 void Menu(int a);
 void Venda();
 void Configuracoes();
+void Opcao();
+void Questionario(int a);
 
 float Valores[2] = {50, 50/2};
 char Poltronas[COL][LIN];
@@ -93,6 +95,18 @@ void OcupacaoAssento(char letra, char numero){
 		}
 	}
 }
+void RemocaoAssento(char letra, char numero){
+	int a, b;
+	for(a=1;a<COL-1;a++){
+		for(b=1;b<LIN-1;b++){
+			if(letra== 75 - a && numero == '0' + b){
+				Poltronas[a][b] = '_';
+				livres+=1;
+				ocupados-=1;
+			}
+		}
+	}
+}
 
 void Entrada(int ingresso){
 	if(ingresso == '1'){
@@ -126,25 +140,29 @@ void Legenda(){
 	coloracaoTexto(0, 15);
 	printf("_________________________");
 }
-
-void Tabela(){
+void Assentos(int col){
 	int a, b;
-	printf("\t\tTABELA DE PRECOS\n\nInteira: \nMeia: ");
-	Gotoxy(40, 2);
-	for(a=0; a<2;a++){
-		printf("%.2f", Valores[a]);
-		Gotoxy(40, 3);
-	}
 	printf("\n\t\t    ASSENTOS\nLivres: \t\t\t\t%d\nOcupados: \t\t\t\t%d", livres, ocupados);
 	printf("\n\n\t\tTABELA DE POLTRONAS\n\n");
 	for(a=0;a<COL-1;a++){
-		Gotoxy(5, 12+a);
+		Gotoxy(5, col+a);
 		for(b=0;b<LIN-1;b++){
 			Cor(Poltronas[a][b] == '_', Poltronas[a][b]);
 			printf(" %c ", Poltronas[a][b]);
 		}
 	}
 	printf("\n\t*********** TELA *************\n");
+}
+
+void Tabela(){
+	int a;
+	printf("\t\tTABELA DE PRECOS\n\nInteira: \nMeia: ");
+	Gotoxy(40, 2);
+	for(a=0; a<2;a++){
+		printf("%.2f", Valores[a]);
+		Gotoxy(40, 3);
+	}
+	Assentos(12);
 }
 
 void Verificacao(){
@@ -180,19 +198,132 @@ void EscolhaAssento(){
 	Verificacao();
 }
 
+void AlterarPrecos(){
+	int a, b;
+	coloracaoTexto(0, 15);
+	printf("\t\tTABELA DE PRECOS\n\tANTIGOS\tNOVOS\nInteira: \nMeia: ");
+	Gotoxy(30, 2);
+	for(a=0; a<2;a++){
+		printf("%.2f", Valores[a]);
+		Gotoxy(30, 3);
+	}
+	Gotoxy(40, 2);
+	for(a=0; a<2;a++){
+		scanf("%f", &Valores[a]);
+		Gotoxy(40, 3);
+	}
+	Gotoxy(0, 5);
+	Questionario(3);
+}
+
+void RemoveAssento(){
+	int a;
+	char assento[2];
+	Assentos(7);
+	Gotoxy(0,22);
+	printf("Letra da fileira:\tNumero da poltrona:");
+	Gotoxy(18,22);
+	for(a=0; a<2;a++){
+		scanf(" %c", &assento[a]);
+		if(a==0){
+			Gotoxy(45, 22);
+		}
+	}
+	Gotoxy(0,24);
+	RemocaoAssento(assento[0], assento[1]);
+	Gotoxy(0,0);
+	Assentos(7);
+	Questionario(4);
+}
+
+void AlteraAssento(){
+	int a;
+	char assento[2];
+	Assentos(7);
+	Gotoxy(0,22);
+	printf("Letra da fileira:\tNumero da poltrona:");
+	Gotoxy(18,22);
+	for(a=0; a<2;a++){
+		scanf(" %c", &assento[a]);
+		if(a==0){
+			Gotoxy(45, 22);
+		}
+	}
+	Gotoxy(0,24);
+	RemocaoAssento(assento[0], assento[1]);
+	Gotoxy(0,0);
+	Assentos(7);
+	Questionario(4);
+}
+
 void Questionario(int op){
 	switch(op){
 		case 1: //Tela de Vendas
 			printf("Deseja Continuar?\n0-VOLTAR AO MENU\n1-CONTINUAR VENDA\n2-APRESENTAR RELATORIO DO DIA E FECHAR PROGRAMA");
-			Gotoxy(18,26);
+			Gotoxy(49,26);
 			scanf("%d", &opcao);
+			if(opcao == 2){
+				opcao = 3;
+			}
 			system("cls");
 			Opcao(); break;
 		case 2: //Configurações
-			printf("Desejas: \n0-VOLTAR AO MENU\n1-ALTERAR PRECOS\n2-REMOVER COMPRA/ASSENTO\n3-ALTERAR COMPRA/ASSENTO\n4-APRESENTAR RELATORIO DO DIA E FECHAR PROGRAMA");
-			Gotoxy(7,26);
+			coloracaoTexto(0,14);
+			printf("Desejas: ");
+			Gotoxy(50,16);
+			printf("0-VOLTAR AO MENU");
+			Gotoxy(50,17);
+			printf("1-ALTERAR PRECOS");
+			Gotoxy(50,18);
+			printf("2-REMOVER COMPRA/ASSENTO");
+			Gotoxy(50,19);
+			printf("3-ALTERAR COMPRA/ASSENTO");
+			Gotoxy(50,20);
+			printf("4-APRESENTAR RELATORIO DO DIA E FECHAR PROGRAMA");
+			Gotoxy(58,15);
 			scanf("%d", &opcao);
-			if(opcao==2){
+			if(opcao==0 ||opcao == 4){
+				if(opcao == 4) opcao = 3;
+				Opcao();
+			}
+			switch(opcao){
+				case 1:
+					system("cls"); AlterarPrecos(); 
+					break;
+				case 2:
+					system("cls"); RemoveAssento(); 
+					break;
+				case 3:
+					//system("cls"); AlterarAssento(); 
+					break;
+			}
+			system("cls");break;
+		case 3: //Alterar Preços
+			printf("Deseja Continuar?\n0-VOLTAR AO MENU\n1-ALTERAR NOVAMENTE\n2-APRESENTAR RELATORIO DO DIA E FECHAR PROGRAMA");
+			Gotoxy(19,5);
+			scanf("%d", &opcao);
+			if(opcao == 1) system("cls"); AlterarPrecos();break;
+			if(opcao == 2){
+				opcao = 3;
+			}
+			system("cls");
+			Opcao(); break;
+		case 4: //Remover Assentos
+			printf("Deseja Continuar?\n0-VOLTAR AO MENU\n1-REMOVER OUTRO ASSENTO\n2-APRESENTAR RELATORIO DO DIA E FECHAR PROGRAMA");
+			Gotoxy(19,5);
+			scanf("%d", &opcao);
+			if(opcao == 1) system("cls"); RemoveAssento();break;
+			if(opcao == 2){
+				opcao = 3;
+			}
+			system("cls");
+			Opcao(); break;
+		case 4: //Alterar Assentos
+			printf("Deseja Continuar?\n0-VOLTAR AO MENU\n1-ALTERAR OUTRO ASSENTO\n2-APRESENTAR RELATORIO DO DIA E FECHAR PROGRAMA");
+			Gotoxy(19,5);
+			scanf("%d", &opcao);
+			if(opcao == 1) system("cls"); AlteraAssento();break;
+			if(opcao == 2){
 				opcao = 3;
 			}
 			system("cls");
@@ -203,7 +334,7 @@ void Questionario(int op){
 void Configuracoes(){
 	system("cls");
 	Tabela();
-	Gotoxy(0,26);
+	Gotoxy(50,15);
 	Questionario(2);
 }
 
@@ -246,6 +377,7 @@ void Opcao(){
 }
 
 void Menu(int a){
+	system("cls");
 	Gotoxy(20+a, 0);
 	coloracaoTexto(0,14);
 	printf("\t\tM E N U");

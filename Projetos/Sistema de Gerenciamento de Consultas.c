@@ -8,8 +8,13 @@
 
 //structs
 struct pessoa{
-	int idade, birth[3], matricula;
-	char nome[LETRAS], email[LETRAS], endereco[6][LETRAS], fone[20], cpf[15], registro_profissional[LETRAS], tipo_de_profissional[LETRAS], sigla[LETRAS];
+	int idade, birth[3], matricula, tipo_profissional;
+	char nome[LETRAS], email[LETRAS], endereco[6][LETRAS], fone[20], cpf[15], registro_profissional[LETRAS];
+};
+
+struct profissao{
+	int id;
+	char profissao[LETRAS], sigla[LETRAS];
 };
 
 struct consulta{
@@ -21,12 +26,14 @@ struct consulta{
 typedef struct pessoa profissional;
 typedef struct pessoa paciente;
 typedef struct consulta consulta;
+typedef struct profissao profissao;
 
 //variáveis globais
-int count_pacientes = 0, count_profissionais = 0, count_consultas = 0, a, b, cod, ExC = 0, ExP = 0, ExPa = 0;
+int count_pacientes = 0, count_profissionais = 0, count_consultas = 0, a, b, i,  cod, ExC = 0, ExP = 0, ExPa = 0, count_profissao = 10;
 char choose[LETRAS], choose1[LETRAS];
 
 paciente lista_pacientes[QTD];
+profissao tprofissao[15];
 profissional lista_profissionais[QTD];
 consulta lista_consulta[QTD];
 
@@ -41,7 +48,55 @@ void Encontra(int idP, int idC);
 void Relatorios();
 void Verificacao(int op);
 void Apresentacao_Relatorios();
+void Profissao(int id);
 
+void Start(){
+	tprofissao[0].id = 1;
+	strcpy(tprofissao[0].profissao, "MEDICO");
+	strcpy(tprofissao[0].sigla, "CRM");
+	tprofissao[1].id = 2;
+	strcpy(tprofissao[1].profissao, "NUTRICIONISTA");
+	strcpy(tprofissao[1].sigla, "CRN");
+	tprofissao[2].id = 3; // Corrigido de profissao[2] para tprofissao[2]
+	strcpy(tprofissao[2].profissao, "DENTISTA");
+	strcpy(tprofissao[2].sigla, "CRO");
+	tprofissao[3].id = 4; // Corrigido
+	strcpy(tprofissao[3].profissao, "FISIOTERAPEUTA");
+	strcpy(tprofissao[3].sigla, "CREFITO");
+	tprofissao[4].id = 5; // Corrigido
+	strcpy(tprofissao[4].profissao, "PSICOLOGO");
+	strcpy(tprofissao[4].sigla, "CRP");
+	tprofissao[5].id = 6; // Corrigido
+	strcpy(tprofissao[5].profissao, "ENFERMEIRO(A)");
+	strcpy(tprofissao[5].sigla, "COREN");
+	tprofissao[6].id = 7; // Corrigido
+	strcpy(tprofissao[6].profissao, "FARMACEUTICO");
+	strcpy(tprofissao[6].sigla, "CRF");
+	tprofissao[7].id = 8; // Corrigido
+	strcpy(tprofissao[7].profissao, "TERAPEUTA OCUPACIONAL");
+	strcpy(tprofissao[7].sigla, "CREFITO");
+	tprofissao[8].id = 9; // Corrigido
+	strcpy(tprofissao[8].profissao, "BIOMEDICO");
+	strcpy(tprofissao[8].sigla, "CRBM");
+	tprofissao[9].id = 10; // Corrigido
+	strcpy(tprofissao[9].profissao, "FONOAUDIOLOGO");
+	strcpy(tprofissao[9].sigla, "CREFONO");
+}
+
+void Profissao(int id){
+	if(id<=count_profissao){
+		printf("\nPROFISSAO: %s\n", tprofissao[id-1].profissao);
+		printf("SIGLA: %s\n", tprofissao[id-1].sigla);	
+	}else{
+		count_profissao++;
+		tprofissao[count_profissao].id = count_profissao-1;
+		printf("\nNOVA PROFISSAO: ");
+		fgets(tprofissao[count_profissao].profissao, LETRAS, stdin);
+		printf("\nSIGLA: ");
+		fgets(tprofissao[count_profissao].sigla, LETRAS, stdin);
+		lista_profissionais[count_profissionais].tipo_profissional = tprofissao[count_profissao].id;
+	}
+}
 
 void Cadastro(){
 	if (strcmp(choose, "PACIENTE") == 0){
@@ -81,7 +136,8 @@ void Cadastro(){
 		fgets(lista_pacientes[count_pacientes].endereco[4], LETRAS, stdin);
 		printf("CEP: ");
 		fgets(lista_pacientes[count_pacientes].endereco[5], LETRAS, stdin);		
-		count_pacientes++;	
+		count_pacientes++;
+		system("pause");	
 		system("cls");
 		Paciente();
 	}else if (strcmp(choose, "PROFISSIONAL") == 0){
@@ -108,14 +164,18 @@ void Cadastro(){
 		fgets(lista_profissionais[count_profissionais].fone, 20, stdin);
 		printf("Email: ");
 		fgets(lista_profissionais[count_profissionais].email, LETRAS, stdin);
-		printf("Profissao: ");
-		fgets(lista_profissionais[count_profissionais].tipo_de_profissional, LETRAS, stdin);
-		printf("Sigla do Conselho (CRM, COREN, etc.): ");
-		fgets(lista_profissionais[count_profissionais].sigla, LETRAS, stdin);
+		for (a=0; a<10; a++){
+			printf("%d | %s | %s\n", tprofissao[a].id, tprofissao[a].sigla, tprofissao[a].profissao);
+		}
+		printf("\nEscolha, mas se sua profissao nao estiver ai, digite -1 para adicionar: ");
+		scanf("%d", &lista_profissionais[count_profissionais].tipo_profissional);
+		getchar();
+		Profissao(lista_profissionais[count_profissionais].tipo_profissional);
 		printf("Numero de Registro Profissional (NRP): ");
 		fgets(lista_profissionais[count_profissionais].registro_profissional, LETRAS, stdin);
 		printf("--------------------------------------------\n");
 		count_profissionais++;
+		system("pause");
 		system("cls");
 		Profissional();	
 	}else if (strcmp(choose, "CONSULTAS") == 0){
@@ -124,19 +184,24 @@ void Cadastro(){
 		printf("MATRICULA: %d\n", lista_consulta[count_consultas].id);
 		printf("Matricula do Profissional Atendente: ");
 		scanf("%d", &lista_consulta[count_consultas].dados_profissional);
-		//	cod = lista_consulta[count_consultas].dados_profissional - 202501;
-		//	printf("Doutor(a): %s", lista_profissionais[cod].nome);
+		cod = lista_consulta[count_consultas].dados_profissional - 202501;
+		printf("Doutor(a): %s", lista_profissionais[cod].nome);
+		Profissao(lista_profissionais[cod].tipo_profissional);
 		printf("Matricula do Paciente: ");
 		scanf("%d", &lista_consulta[count_consultas].dados_paciente);
+		cod = lista_consulta[count_consultas].dados_paciente - 202501;
+		printf("Paciente: %s", lista_pacientes[cod].nome);
+		printf("CPF: %s", lista_pacientes[cod].cpf);
 		getchar();
-		Encontra(lista_consulta[a].dados_profissional, lista_consulta[a].dados_paciente);
 		printf("Data da Consulta: ");
 		for(b=0; b<3; b++){
 			scanf("%d", &lista_consulta[a].data[b]);
 		}
+		getchar();
 		printf("Descricao: ");
 		fgets(lista_consulta[count_consultas].descricao, LETRAS, stdin);
 		count_consultas++;
+		system("pause");
 		system("cls");
 		Consultas();
 	}
@@ -169,10 +234,11 @@ void Listagem(){
 			for (a=0; a < count_profissionais; a++){
 				if(lista_profissionais[a].matricula != 0){
 					printf("MATRICULA: %d | ",lista_profissionais[a].matricula);
-					printf("PROFISSAO: %s (%s - %s)\n",lista_profissionais[a].tipo_de_profissional, lista_profissionais[a].sigla, lista_profissionais[a].registro_profissional);
 					printf("NOME: %s\n",lista_profissionais[a].nome);
+					Profissao(lista_profissionais[a].tipo_profissional);
+					printf("NRP: %s", lista_profissionais[a].registro_profissional);
 					printf("NASCIMENTO: %d | %d | %d (%d ANOS)\n", lista_profissionais[a].birth[0], lista_profissionais[a].birth[1],  lista_profissionais[a].birth[2], lista_profissionais[a].idade);
-					printf("CONTATO: \nCEL: %s\nEMAIL: %s\n", lista_profissionais[a].fone, lista_profissionais[a].email);
+					printf("CONTATO: %sEMAIL: %s\n", lista_profissionais[a].fone, lista_profissionais[a].email);
 					printf("----------------------------------------------------------------\n");
 				}
 			}
@@ -203,7 +269,7 @@ void Encontra(int idP, int idC){
 	for(a=0; a<=count_profissionais; a++){
 		if(lista_profissionais[a].matricula == idP){
 			printf("RESPONSAVEL: %s",lista_profissionais[a].nome);
-			printf("PROFISSAO: %s", lista_profissionais[a].tipo_de_profissional);
+			Profissao(lista_profissionais[a].tipo_profissional);
 			printf("----------------------------------------------------------------\n");
 		}
 	}
@@ -219,6 +285,7 @@ void Encontra(int idP, int idC){
 
 void Editar(){
 	int op, mat;
+	char Alterar[LETRAS];
 	system("cls");
 	if (strcmp(choose, "PACIENTE") == 0){
 		printf("---------------- EDITAR DADOS DO PACIENTE ------------------\n");
@@ -229,42 +296,80 @@ void Editar(){
 				printf("---------------------- ANTIGO DADO -----------------------\n");
 				printf("MATRICULA: %d | ",lista_pacientes[a].matricula);
 				printf("NOME: %s\n",lista_pacientes[a].nome);
-				printf("NASCIMENTO: %d / %d / %d (%d)\n", lista_pacientes[a].birth[0], lista_pacientes[a].birth[1], lista_pacientes[a].birth[2], lista_pacientes[a].idade);
+				printf("NASCIMENTO: %d | %d | %d (%d)\n", lista_pacientes[a].birth[0], lista_pacientes[a].birth[1], lista_pacientes[a].birth[2], lista_pacientes[a].idade);
 				printf("CONTATO: \nCEL: %s\nEMAIL: %s\n",lista_pacientes[a].fone, lista_pacientes[a].email);
 				printf("----------------------------------------------------------------\n\n");
 				printf("----------------------- NOVO DADO ------------------------\n");
-				printf("NOME: ");
-				fgets(lista_pacientes[a].nome, LETRAS, stdin);
-				printf("Data de Nascimento: ");
-				for(b=0; b<3; b++){
-					scanf("%d", &lista_pacientes[a].birth[b]);
-				}
-				getchar();
-				if(lista_pacientes[a].birth[1] < 11 ){
-					lista_pacientes[a].idade = 2025 - lista_pacientes[a].birth[2];	
-				}else if(lista_pacientes[a].birth[1] >= 11 ){
-					lista_pacientes[a].idade = 2026 - lista_pacientes[a].birth[2];
-				}
-				printf("Idade: %d\n", lista_pacientes[a].idade);
-				printf("Fone: ");
-				fgets(lista_pacientes[a].fone, 20, stdin);
-				printf("Email: ");
-				fgets(lista_pacientes[a].email, LETRAS, stdin);
-				printf("________________________ Endereco ______________________\n");
-				printf("LOGRADOURO: ");
-				fgets(lista_pacientes[a].endereco[0], LETRAS, stdin);
-				printf("NUMERO: ");
-				fgets(lista_pacientes[a].endereco[1], LETRAS, stdin);
-				printf("BAIRRO: ");
-				fgets(lista_pacientes[a].endereco[2], LETRAS, stdin);
-				printf("CIDADE: ");
-				fgets(lista_pacientes[a].endereco[3], LETRAS, stdin);
-				printf("ESTADO: ");
-				fgets(lista_pacientes[a].endereco[4], LETRAS, stdin);
-				printf("CEP: ");
-				fgets(lista_pacientes[a].endereco[5], LETRAS, stdin);	
+			    printf("Qual campo deseja alterar (nome, data, fone, email, logradouro, numero, bairro, cidade, estado, cep) ou pressione ENTER/texto invalido para sair: ");
+				do {
+			    fgets(Alterar, LETRAS, stdin); 
+			    Alterar[strcspn(Alterar, "\n")] = 0;
+			    if (strcmp(Alterar, "nome") == 0 || strcmp(Alterar, "NOME") == 0 || strcmp(Alterar, "Nome") == 0) {
+			        printf("Novo NOME: ");
+			        fgets(lista_pacientes[a].nome, LETRAS, stdin);
+			        strcpy(Alterar, "");
+			    }else if (strcmp(Alterar, "data") == 0 || strcmp(Alterar, "DATA") == 0 || strcmp(Alterar, "Data") == 0 || strcmp(Alterar, "nascimento") == 0) {
+			        printf("Nova Data de Nascimento (Dia Mes Ano, ex: 25 11 1990): ");
+			        strcpy(Alterar, "");
+					for (b = 0; b < 3; b++) {
+			            // Usei 'b' como no seu código original para a leitura da data
+			            scanf("%d", &lista_pacientes[a].birth[b]);    
+			        }
+			        getchar(); // Consome o \n residual após o scanf
+			        
+			        // CÁLCULO DA IDADE (Ajustado para 2025/Novembro)
+			        // Mantenho a sua lógica original para 2026, mas sugiro a lógica mais simples abaixo.
+			        if (lista_pacientes[a].birth[1] < 11 ){ // Mês anterior a Novembro
+			            lista_pacientes[a].idade = 2025 - lista_pacientes[a].birth[2];    
+			        }else { // Mês de Novembro ou Dezembro (>= 11)
+			            lista_pacientes[a].idade = 2026 - lista_pacientes[a].birth[2]; // Isso implica que o ano virou.
+			        }
+			        
+			        printf("Idade recalculada: %d\n", lista_pacientes[a].idade);
+				    }else if (strcmp(Alterar, "fone") == 0 || strcmp(Alterar, "FONE") == 0 || strcmp(Alterar, "contato") == 0) {
+				        printf("Novo Fone: ");
+				        fgets(lista_pacientes[a].fone, 20, stdin);
+				        strcpy(Alterar, "");
+				    }else if (strcmp(Alterar, "email") == 0 || strcmp(Alterar, "EMAIL") == 0) {
+				        printf("Novo Email: ");
+				        fgets(lista_pacientes[a].email, LETRAS, stdin);
+				        strcpy(Alterar, "");
+				    }else if (strcmp(Alterar, "logradouro") == 0 || strcmp(Alterar, "LOGRADOURO") == 0) {
+				        printf("Novo LOGRADOURO: ");
+				        fgets(lista_pacientes[a].endereco[0], LETRAS, stdin);
+				        strcpy(Alterar, "");
+				    }else if (strcmp(Alterar, "numero") == 0 || strcmp(Alterar, "NUMERO") == 0) {
+				        printf("Novo NUMERO: ");
+				        fgets(lista_pacientes[a].endereco[1], LETRAS, stdin);
+				        strcpy(Alterar, "");
+				    }else if (strcmp(Alterar, "bairro") == 0 || strcmp(Alterar, "BAIRRO") == 0) {
+				        printf("Novo BAIRRO: ");
+				        fgets(lista_pacientes[a].endereco[2], LETRAS, stdin);
+				        strcpy(Alterar, "");
+				    }else if (strcmp(Alterar, "cidade") == 0 || strcmp(Alterar, "CIDADE") == 0) {
+				        printf("Nova CIDADE: ");
+				        fgets(lista_pacientes[a].endereco[3], LETRAS, stdin);
+				        strcpy(Alterar, "");
+				    }else if (strcmp(Alterar, "estado") == 0 || strcmp(Alterar, "ESTADO") == 0) {
+				        printf("Novo ESTADO: ");
+				        fgets(lista_pacientes[a].endereco[4], LETRAS, stdin);
+				        strcpy(Alterar, "");
+				    }else if (strcmp(Alterar, "cep") == 0 || strcmp(Alterar, "CEP") == 0) {
+				        printf("Novo CEP: ");
+				        fgets(lista_pacientes[a].endereco[5], LETRAS, stdin);
+				        strcpy(Alterar, "");
+				    }else {
+				        // Se o usuário digitou algo (não vazio), avisa que é inválido
+				        if (strlen(Alterar) > 0) {
+				             printf("Opção de alteração inválida. Saindo do modo de alteração.\n");
+				        }
+				        // Se for vazio (pressionou ENTER), o loop encerra naturalmente.
+				    }
+				} while(strcmp(Alterar, "") != 0 );
 			}
 		}
+		system("pause");
+		Paciente();
 	}else if (strcmp(choose, "PROFISSIONAL") == 0){
 		printf("---------------- EDITAR DADOS DO PROFISSIONAL ------------------\n");
 		printf("Digite a matricula do profissional: ");
@@ -275,38 +380,66 @@ void Editar(){
 				printf("MATRICULA: %d | ",lista_profissionais[a].matricula);
 				printf("NOME: %s\n",lista_profissionais[a].nome);
 				printf("CPF: %s\n",lista_profissionais[a].cpf);
-				printf("PROFISSAO: %s\n",lista_profissionais[a].tipo_de_profissional);
-				printf("SIGLA: %s\n",lista_profissionais[a].sigla);
-				printf("NUMERO DE REGISTRO: %s (%s - %s)\n",lista_profissionais[a].registro_profissional);
-				printf("NASCIMENTO: %d / %d / %d (%d)\n", lista_profissionais[a].birth[0], lista_profissionais[a].birth[1],  lista_profissionais[a].birth[2], lista_profissionais[a].idade);
+				Profissao(lista_profissionais[a].tipo_profissional);
+				printf("NUMERO DE REGISTRO: %s",lista_profissionais[a].registro_profissional);
+				printf("NASCIMENTO: %d | %d | %d (%d)\n", lista_profissionais[a].birth[0], lista_profissionais[a].birth[1],  lista_profissionais[a].birth[2], lista_profissionais[a].idade);
 				printf("CONTATO: \nCEL: %s\nEMAIL: %s\n", lista_profissionais[a].fone, lista_profissionais[a].email);
 				printf("----------------------------------------------------------\n\n");
 				printf("----------------------- NOVO DADO ------------------------\n");
-				printf("NOME: ");
-				fgets(lista_profissionais[count_profissionais].nome, LETRAS, stdin);
-				printf("Data de Nascimento: ");
-				for(a=0; a<3; a++){
-					scanf("%d", &lista_profissionais[count_profissionais].birth[a]);
+				printf("Qual campo deseja alterar (nome, data, fone, email, profissao, registro) ou pressione ENTER/texto invalido para sair: ");
+				do{
+					fgets(Alterar, LETRAS, stdin);
+				if (strcmp(Alterar, "nome") == 0 || strcmp(Alterar, "NOME") == 0 || strcmp(Alterar, "Nome") == 0) {
+				    printf("Novo NOME: ");
+				    fgets(lista_profissionais[a].nome, LETRAS, stdin);
+				    strcpy(Alterar, "");
+				}else if (strcmp(Alterar, "data") == 0 || strcmp(Alterar, "DATA") == 0 || strcmp(Alterar, "Data") == 0 || strcmp(Alterar, "nascimento") == 0) {
+				    strcpy(Alterar, "");
+				    printf("Nova Data de Nascimento (Dia Mes Ano, ex: 25 11 1990): ");
+				    
+				    // Leitura da data (Dia, Mês, Ano)
+				    for (i = 0; i < 3; i++) {
+				        // Usei 'i' para o loop interno para não conflitar com o 'a' do loop externo
+				        scanf("%d", &lista_profissionais[a].birth[i]); 
+				    }
+				    getchar(); // Consome o \n residual após o scanf
+				    
+				    // CÁLCULO DA IDADE (Ajustado para o ano atual, 2025)
+				    lista_profissionais[a].idade = 2025 - lista_profissionais[a].birth[2];
+				    
+				    // Ajuste: Se o mês de nascimento for maior que o mês atual (Novembro, que é 11),
+				    // o aniversário ainda não chegou, então subtraímos 1 da idade.
+				    if (lista_profissionais[a].birth[1] > 11) { 
+				        lista_profissionais[a].idade--;
+				    }
+				    
+				    printf("Idade recalculada: %d\n", lista_profissionais[a].idade);
+				}else if (strcmp(Alterar, "contato") == 0 || strcmp(Alterar, "CONTATO") == 0) {
+				    strcpy(Alterar, "");
+				    printf("Novo Fone: ");
+				    fgets(lista_profissionais[a].fone, 20, stdin);
+				}else if (strcmp(Alterar, "email") == 0 || strcmp(Alterar, "EMAIL") == 0) {
+				    strcpy(Alterar, "");
+				    printf("Novo Email: ");
+				    fgets(lista_profissionais[a].email, LETRAS, stdin);
+				}else if (strcmp(Alterar, "profissao") == 0 || strcmp(Alterar, "PROFISSÃO") == 0 || strcmp(Alterar, "tipo") == 0) {
+				    strcpy(Alterar, "");
+				    printf("Novo Tipo de Profissao (Digite o numero): ");
+				    scanf("%d", &lista_profissionais[a].tipo_profissional);
+				    getchar();
+					Profissao(lista_profissionais[a].tipo_profissional);
+				}else if (strcmp(Alterar, "registro") == 0 || strcmp(Alterar, "REGISTRO") == 0 || strcmp(Alterar, "nrp") == 0) {
+				    strcpy(Alterar, "");
+				    printf("Novo Numero de Registro Profissional (NRP): ");
+				    fgets(lista_profissionais[a].registro_profissional, LETRAS, stdin);
+				}else {
+				    printf("Opção de alteração inválida. Tente 'nome', 'data', 'fone', 'email', 'profissao' ou 'registro'.\n");
 				}
-				getchar();		
-				if(lista_profissionais[count_profissionais].birth[1] < 11 ){
-					lista_profissionais[count_profissionais].idade = 2025 - lista_profissionais[count_profissionais].birth[2];	
-				}else if (lista_profissionais[count_profissionais].birth[1] >= 11 ){
-					lista_profissionais[count_profissionais].idade = 2026 - lista_profissionais[count_profissionais].birth[2];
-				}
-				printf("Idade: %d", lista_profissionais[count_profissionais].idade);
-				printf("\nFone: ");
-				fgets(lista_profissionais[count_profissionais].fone, 20, stdin);
-				printf("Email: ");
-				fgets(lista_profissionais[count_profissionais].email, LETRAS, stdin);
-				printf("Profissao: ");
-				fgets(lista_profissionais[count_profissionais].tipo_de_profissional, LETRAS, stdin);
-				printf("Sigla do Conselho (CRM, COREN, etc.): ");
-				fgets(lista_profissionais[count_profissionais].sigla, LETRAS, stdin);
-				printf("Numero de Registro Profissional (NRP): ");
-				fgets(lista_profissionais[count_profissionais].registro_profissional, LETRAS, stdin);			
+				} while(strcmp(Alterar, "") != 0 );
 			}
-		}	
+		}
+		system("pause");
+		Profissional();
 	}else if (strcmp(choose, "CONSULTAS") == 0){
 		printf("---------------- EDITAR DADOS DO ATENDIMENTOS --------------------\n");
 		printf("Digite a identificacao do atendimento: ");
@@ -314,7 +447,7 @@ void Editar(){
 		for(a=0;a<=count_consultas; a++){
 			if(lista_consulta[a].id == mat){
 				printf("---------------------- ANTIGO DADO -----------------------\n");
-				printf("ATENDIMENTO: #%d em %d / %d/ %d\n", lista_consulta[a].id, lista_consulta[a].data[0], lista_consulta[a].data[1], lista_consulta[a].data[2]);
+				printf("ATENDIMENTO: #%d em %d | %d | %d \n", lista_consulta[a].id, lista_consulta[a].data[0], lista_consulta[a].data[1], lista_consulta[a].data[2]);
 				Encontra(lista_consulta[a].dados_profissional, lista_consulta[a].dados_paciente);
 				printf("DESCRICAO: %s \n", lista_consulta[a].descricao);
 				printf("----------------------------------------------------------\n\n");
@@ -329,7 +462,9 @@ void Editar(){
 				printf("Descricao: ");
 				fgets(lista_consulta[count_consultas].descricao, LETRAS, stdin);
 			}
-		}	
+		}
+		system("pause");
+		Consultas();	
 	}
 }
 
@@ -342,11 +477,11 @@ void Excluir(){
 		scanf("%d", &mat);
 		for(a=0;a<=count_pacientes; a++){
 			if(lista_pacientes[a].matricula == mat){
-				printf("---------------------- ANTIGO DADO -----------------------\n");
+				printf("--------------------------- DADO ------------------------------\n");
 				printf("MATRICULA: %d | ",lista_pacientes[a].matricula);
 				printf("NOME: %s",lista_pacientes[a].nome);
 				printf("NASCIMENTO: %d / %d / %d (%d anos)", lista_pacientes[a].birth[0], lista_pacientes[a].birth[1], lista_pacientes[a].birth[2], lista_pacientes[a].idade);
-				printf("\nCONTATO: \nCEL: %s\nEMAIL: %s",lista_pacientes[a].fone, lista_pacientes[a].email);
+				printf("\nCONTATO: %s\nEMAIL: %s",lista_pacientes[a].fone, lista_pacientes[a].email);
 				printf("----------------------------------------------------------------\n\n");
 				printf("CONTINUAR? 0 - Nao\t1 - Sim\n");
 				scanf("%d", &resp);
@@ -354,24 +489,24 @@ void Excluir(){
 					lista_pacientes[a].matricula = 0;
 					ExPa++;
 				}
-				system("pause");
 			}
 		}
+		system("pause");
+		Paciente();
 	}else if (strcmp(choose, "PROFISSIONAL") == 0){
 		printf("---------------- EXCLUIR DADOS DO PROFISSIONAL ------------------\n");
 		printf("Digite a matricula do profissional: ");
 		scanf("%d", &mat);
 		for(a=0;a<=count_profissionais; a++){
 			if(lista_profissionais[a].matricula == mat){
-				printf("---------------------- ANTIGO DADO -----------------------\n");
+				printf("-------------------------- DADO --------------------------\n");
 				printf("MATRICULA: %d | ",lista_profissionais[a].matricula);
 				printf("NOME: %s",lista_profissionais[a].nome);
 				printf("CPF: %s",lista_profissionais[a].cpf);
-				printf("PROFISSAO: %s",lista_profissionais[a].tipo_de_profissional);
-				printf("SIGLA: %s", lista_profissionais[a].sigla);
+				Profissao(lista_profissionais[a].tipo_profissional);
 				printf("NUMERO DE REGISTRO: %s",lista_profissionais[a].registro_profissional);
 				printf("NASCIMENTO: %d / %d / %d (%d anos)", lista_profissionais[a].birth[0], lista_profissionais[a].birth[1],  lista_profissionais[a].birth[2], lista_profissionais[a].idade);
-				printf("\nCONTATO: \nCEL: %s\nEMAIL: %s", lista_profissionais[a].fone, lista_profissionais[a].email);
+				printf("\nCEL: %s\nEMAIL: %s", lista_profissionais[a].fone, lista_profissionais[a].email);
 				printf("----------------------------------------------------------\n\n");
 				printf("CONTINUAR? 0 - Nao\t1 - Sim\n");
 				scanf("%d", &resp);
@@ -381,11 +516,16 @@ void Excluir(){
 				}
 				system("pause");		
 			}
-		}	
+		}
+		system("pause");
+		Profissional();
 	}else if (strcmp(choose, "CONSULTAS") == 0){
+		printf("---------------- EXCLUIR DADOS DA CONSULTA ----------------------\n");
+		printf("Digite o codigo da consulta: ");
+		scanf("%d", &mat);
 		for(a=0;a<count_consultas; a++){
 			if(lista_consulta[a].id == mat){
-				printf("---------------------- ANTIGO DADO -----------------------\n");
+				printf("-------------------------- DADO --------------------------\n");
 				printf("ATENDIMENTO: #%d em %d / %d/ %d\n", lista_consulta[a].id, lista_consulta[a].data[0], lista_consulta[a].data[1], lista_consulta[a].data[2]);
 				Encontra(lista_consulta[a].dados_profissional, lista_consulta[a].dados_paciente);
 				printf("DESCRICAO: %s \n", lista_consulta[a].descricao);
@@ -398,7 +538,9 @@ void Excluir(){
 				}
 				system("pause");
 			}
-		}	
+		}
+		system("pause");
+		Consultas();
 	}	
 }
 
@@ -510,7 +652,7 @@ void Apresentacao_Relatorios(){
 					printf("----------------------------------------------------------------\n");
 					printf("MATRICULA: %d | ",lista_pacientes[a].matricula);
 					printf("NOME: %s\n",lista_pacientes[a].nome);
-					printf("NASCIMENTO: %d / %d / %d (%d)\n", lista_pacientes[a].birth[0], lista_pacientes[a].birth[1], lista_pacientes[a].birth[2], lista_pacientes[a].idade);
+					printf("NASCIMENTO: %d | %d | %d (%d)\n", lista_pacientes[a].birth[0], lista_pacientes[a].birth[1], lista_pacientes[a].birth[2], lista_pacientes[a].idade);
 				}
 			}
 		}else if(strcmp(escolha, "todos") == 0){
@@ -519,7 +661,7 @@ void Apresentacao_Relatorios(){
 					printf("----------------------------------------------------------------\n");
 					printf("MATRICULA: %d | ",lista_pacientes[a].matricula);
 					printf("NOME: %s\n",lista_pacientes[a].nome);
-					printf("NASCIMENTO: %d / %d / %d (%d)\n", lista_pacientes[a].birth[0], lista_pacientes[a].birth[1], lista_pacientes[a].birth[2], lista_pacientes[a].idade);
+					printf("NASCIMENTO:  %d | %d | %d (%d)\n", lista_pacientes[a].birth[0], lista_pacientes[a].birth[1], lista_pacientes[a].birth[2], lista_pacientes[a].idade);
 				}
 			}
 			for(a=0; a<count_profissionais;a++){
@@ -527,8 +669,8 @@ void Apresentacao_Relatorios(){
 					printf("----------------------------------------------------------------\n");
 					printf("MATRICULA: %d | ",lista_profissionais[a].matricula);
 					printf("NOME: %s\n",lista_profissionais[a].nome);
-					printf("PROFISSAO: %s\n", lista_profissionais[a].tipo_de_profissional);
-					printf("NASCIMENTO: %d / %d / %d (%d)\n", lista_profissionais[a].birth[0], lista_profissionais[a].birth[1], lista_profissionais[a].birth[2], lista_profissionais[a].idade);
+					Profissao(lista_profissionais[a].tipo_profissional);
+					printf("NASCIMENTO: %d | %d | %d (%d)\n", lista_profissionais[a].birth[0], lista_profissionais[a].birth[1], lista_profissionais[a].birth[2], lista_profissionais[a].idade);
 				}
 			}
 		}
@@ -540,7 +682,7 @@ void Apresentacao_Relatorios(){
 		for(a=0; a<count_consultas;a++){
 			if(m == lista_consulta[a].dados_profissional){
 				printf("----------------------------------------------------------------\n");
-				printf("ATENDIMENTO: #%d em %d / %d/ %d\n", lista_consulta[a].id, lista_consulta[a].data[0], lista_consulta[a].data[1], lista_consulta[a].data[2]);
+				printf("ATENDIMENTO: #%d em %d | %d | %d \n", lista_consulta[a].id, lista_consulta[a].data[0], lista_consulta[a].data[1], lista_consulta[a].data[2]);
 				Encontra(lista_consulta[a].dados_profissional, lista_consulta[a].dados_paciente);
 				printf("DESCRICAO: %s \n", lista_consulta[a].descricao);
 			}
@@ -580,6 +722,7 @@ void Menu(){
 
 int main(){
 	setlocale(LC_ALL, "pt-br");
+	Start();
 	printf("\n\n\n---------------------------------------------------------------------------------------------------------------------\n\n\n\n\n");
 	printf("                                     SISTEMA DE GERENCICAMENTO DE CONSULTAS");
 	printf("\n\n\n\n\n---------------------------------------------------------------------------------------------------------------------\n\n\n\n\n");

@@ -2,7 +2,7 @@
 #include<string.h>
 #include<locale.h>
 #include<stdlib.h>
-
+#include <windows.h>
 #define QTD 30
 #define LETRAS 50
 
@@ -28,7 +28,7 @@ typedef struct pessoa paciente;
 typedef struct consulta consulta;
 typedef struct profissao profissao;
 
-//vari√°veis globais
+//vari·veis globais
 int count_pacientes = 0, count_profissionais = 0, count_consultas = 0, a, b, i,  cod, ExC = 0, ExP = 0, ExPa = 0, count_profissao = 10;
 char choose[LETRAS], choose1[LETRAS];
 
@@ -37,7 +37,7 @@ profissao tprofissao[15];
 profissional lista_profissionais[QTD];
 consulta lista_consulta[QTD];
 
-//fun√ß√µes
+//funÁıes
 void Cadastro();
 void Profissional();
 void Paciente();
@@ -224,7 +224,7 @@ void Cadastro(){
 		printf("Paciente: %s", lista_pacientes[cod].nome);
 		printf("CPF: %s", lista_pacientes[cod].cpf);
 		getchar();
-		printf("Data da Consulta: ");
+		printf("Data da Consulta:   /   /   ");
 		for(b=0; b<3; b++){
 			scanf("%d", &lista_consulta[count_consultas].data[b]);
 			getchar();
@@ -416,9 +416,9 @@ void Editar(){
 				        fgets(lista_pacientes[a].endereco[5], LETRAS, stdin);
 				        strcpy(Alterar, "");
 				    }else {
-				        // Se o usu√°rio digitou algo (n√£o vazio), avisa que √© inv√°lido
+				        // Se o usu·rio digitou algo (n„o vazio), avisa que È inv·lido
 				        if (strlen(Alterar) > 0) {
-				             printf("Op√ß√£o de altera√ß√£o inv√°lida. Saindo do modo de altera√ß√£o.\n");
+				             printf("OpÁ„o de alteraÁ„o inv·lida. Saindo do modo de alteraÁ„o.\n");
 				        }
 				        // Se for vazio (pressionou ENTER), o loop encerra naturalmente.
 				    }
@@ -488,7 +488,7 @@ void Editar(){
 				    strcpy(Alterar, "");
 				    printf("Novo Email: ");
 				    fgets(lista_profissionais[a].email, LETRAS, stdin);
-				}else if (strcmp(Alterar, "profissao") == 0 || strcmp(Alterar, "PROFISS√ÉO") == 0 || strcmp(Alterar, "tipo") == 0) {
+				}else if (strcmp(Alterar, "profissao") == 0 || strcmp(Alterar, "PROFISS√O") == 0 || strcmp(Alterar, "tipo") == 0) {
 				    strcpy(Alterar, "");
 				    for (a=0; a<10; a++){
 						printf("%d | %s\n", tprofissao[a].id, tprofissao[a].profissao);
@@ -502,7 +502,7 @@ void Editar(){
 				    printf("Novo Numero de Registro Profissional (NRP): ");
 				    fgets(lista_profissionais[a].registro_profissional, LETRAS, stdin);
 				}else {
-				    printf("Op√ß√£o de altera√ß√£o inv√°lida. Tente 'nome', 'data', 'fone', 'email', 'profissao' ou 'registro'.\n");
+				    printf("OpÁ„o de alteraÁ„o inv·lida. Tente 'nome', 'data', 'fone', 'email', 'profissao' ou 'registro'.\n");
 				}
 				} while(strcmp(Alterar, "") != 0 );
 			}

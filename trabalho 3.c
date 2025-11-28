@@ -95,27 +95,22 @@ void salvarProfissionais() {
     
 }
 
-/*
 void salvarClientes() {
 	int i;
-    FILE *f = fopen("clientes.txt","w");
-    if(!f) return;
-    for(i = 0; i < qtdClientes; i++) {
-        fprintf(f,"%d;%s;%02d/%02d/%04d;%d;%s;%s;%s;%s\n",
-            clientes[i].codigo,
-            clientes[i].nome,
-            clientes[i].dataNasc.dia,
-            clientes[i].dataNasc.mes,
-            clientes[i].dataNasc.ano,
-            clientes[i].idade,
-            clientes[i].email,
-            clientes[i].fone,
-            clientes[i].celular,
-            clientes[i].endereco);
-    }
+    FILE *f = fopen("lista_clientes.txt","w");
+    if(f){
+    	for(i = 0; i < count_pacientes; i++) {
+	        fprintf(f, "MATRICULA: %d\nNOME: %sCPF: %s__\n",
+	            lista_pacientes[i].matricula,
+				lista_pacientes[i].nome);
+	    }
     fclose(f);
+	}else{
+		printf("ERRO: Não ta salvando os dados!");
+		return;
+	}
 }
-
+/*
 void salvarAtendimentos() {
 	int i;
     FILE *f = fopen("atendimentos.txt","w");

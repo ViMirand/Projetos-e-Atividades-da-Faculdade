@@ -51,41 +51,31 @@ void Apresentacao_Relatorios();
 void Profissao(int id);
 
 //arquivos
-/*
 void salvarProfissoes() {
 	int i;
-    FILE *f = fopen("profissoes.txt", "w");
-    if (!f) return;
-    for(i = 0; i < qtdProfissoes; i++) {
-        fprintf(f, "%d;%s;%s\n", profissoes[i].codigo, profissoes[i].nome, profissoes[i].sigla);
-    }
-    fclose(f);
+    FILE *f = fopen("lista_profissoes.txt", "w");
+    if (f){
+    	for(i = 0; i < count_profissao; i++) {
+	        fprintf(f, "ID: #%d\nPROFISSÃO: %s\nSIGLA: %s\n_\n", tprofissao[i].id, tprofissao[i].profissao, tprofissao[i].sigla);
+	    }
+	    fclose(f);
+	}else{
+		printf("ERRO: Não ta salvando os dados!");
+		return;
+	}
 }
-
-void carregarProfissoes() {
-    FILE *f = fopen("profissoes.txt", "r"); //r de read
-    if (!f) return;
-    qtdProfissoes = 0;
-    //%49[^;] - le ate 49 caracteres, ; - para de ler se entrontrar ;
-    while(fscanf(f, "%d;%49[^;];%9[^\n]\n", &profissoes[qtdProfissoes].codigo,
-                 profissoes[qtdProfissoes].nome, profissoes[qtdProfissoes].sigla) == 3) {
-        qtdProfissoes++;
-    }
-    fclose(f);
-}
-*/
 
 void salvarProfissionais() {
 	int i;
 	char prof[LETRAS], sig[LETRAS]; 
-    FILE *f = fopen("profissionais.txt", "w");
+    FILE *f = fopen("lista_profissionais.txt", "w");
     if(f){
     	for(i = 0; i < count_profissionais; i++) {
 	    	if(lista_profissionais[i].tipo_profissional <= count_profissao){
 				strcpy(prof, tprofissao[lista_profissionais[i].tipo_profissional-1].profissao);
 				strcpy(sig, tprofissao[lista_profissionais[i].tipo_profissional-1].sigla);	
 			}
-	        fprintf(f, "MATRICULA: %d\nNOME: %sCPF: %sPROFISSAO: %sSIGLA: %sDATA DE ANIVERSARIO: %d/%d/%d\nTELEFONE: %sEMAIL: %s",
+	        fprintf(f, "MATRICULA: %d\nNOME: %sCPF: %sPROFISSAO: %s\nSIGLA: %s\nDATA DE ANIVERSARIO: %d/%d/%d\nTELEFONE: %sEMAIL: %s__\n",
 	            lista_profissionais[i].matricula,
 	            lista_profissionais[i].nome,
 	            lista_profissionais[i].cpf,
@@ -99,33 +89,13 @@ void salvarProfissionais() {
 	    }
     fclose(f);
 	}else{
-		printf("ERRO: Não ta salvando os dados;");
+		printf("ERRO: Não ta salvando os dados!");
 		return;
 	}
     
 }
-/*
-void carregarProfissionais() {
-    FILE *f = fopen("profissionais.txt", "r");
-    if(!f) return;
-    qtdProfissionais = 0;
-    while(fscanf(f, "%d;%49[^;];%19[^;];%d;%d;%29[^;];%d/%d/%d;%49[^;];%19[^\n]\n",
-                 &profissionais[qtdProfissionais].matricula,
-                 profissionais[qtdProfissionais].nome,
-                 profissionais[qtdProfissionais].cpf,
-                 &profissionais[qtdProfissionais].Prof_codigo,
-                 &profissionais[qtdProfissionais].numRP,
-                 profissionais[qtdProfissionais].tipo,
-                 &profissionais[qtdProfissionais].dataNasc.dia,
-                 &profissionais[qtdProfissionais].dataNasc.mes,
-                 &profissionais[qtdProfissionais].dataNasc.ano,
-                 profissionais[qtdProfissionais].email,
-                 profissionais[qtdProfissionais].fone) == 11) {
-        qtdProfissionais++;
-    }
-    fclose(f);
-}
 
+/*
 void salvarClientes() {
 	int i;
     FILE *f = fopen("clientes.txt","w");
@@ -146,26 +116,6 @@ void salvarClientes() {
     fclose(f);
 }
 
-void carregarClientes() {
-    FILE *f = fopen("clientes.txt","r");
-    if(!f) return;
-    qtdClientes = 0;
-    while(fscanf(f,"%d;%49[^;];%d/%d/%d;%d;%49[^;];%19[^;];%19[^;];%99[^\n]\n",
-                &clientes[qtdClientes].codigo,
-                clientes[qtdClientes].nome,
-                &clientes[qtdClientes].dataNasc.dia,
-                &clientes[qtdClientes].dataNasc.mes,
-                &clientes[qtdClientes].dataNasc.ano,
-                &clientes[qtdClientes].idade,
-                clientes[qtdClientes].email,
-                clientes[qtdClientes].fone,
-                clientes[qtdClientes].celular,
-                clientes[qtdClientes].endereco) == 10) {
-        qtdClientes++;
-    }
-    fclose(f);
-}
-
 void salvarAtendimentos() {
 	int i;
     FILE *f = fopen("atendimentos.txt","w");
@@ -182,25 +132,7 @@ void salvarAtendimentos() {
     }
     fclose(f);
 }
-
-void carregarAtendimentos() {
-    FILE *f = fopen("atendimentos.txt","r");
-    if(!f) return;
-    qtdAtendimentos = 0;
-    while(fscanf(f,"%d;%d;%d;%d/%d/%d;%199[^\n]\n",
-                 &atendimentos[qtdAtendimentos].numero,
-                 &atendimentos[qtdAtendimentos].Prof_matricula,
-                 &atendimentos[qtdAtendimentos].Cliente_codigo,
-                 &atendimentos[qtdAtendimentos].data.dia,
-                 &atendimentos[qtdAtendimentos].data.mes,
-                 &atendimentos[qtdAtendimentos].data.ano,
-                 atendimentos[qtdAtendimentos].descricao) == 7) {
-        qtdAtendimentos++;
-    }
-    fclose(f);
-}
 */
-
 
 void Start(){
 	tprofissao[0].id = 1;
@@ -248,6 +180,7 @@ void Profissao(int id){
 		fgets(tprofissao[count_profissao].sigla, LETRAS, stdin);
 		lista_profissionais[count_profissionais].tipo_profissional = tprofissao[count_profissao].id;
 	}
+	salvarProfissoes();
 }
 
 void Cadastro(){
@@ -357,8 +290,8 @@ void Cadastro(){
 		printf("Numero de Registro Profissional (NRP): ");
 		fgets(lista_profissionais[count_profissionais].registro_profissional, LETRAS, stdin);
 		printf("--------------------------------------------\n");
-		salvarProfissionais();
 		count_profissionais++;
+		salvarProfissionais();
 		system("pause");
 		system("cls");
 		Profissional();	
